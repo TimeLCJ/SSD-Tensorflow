@@ -43,6 +43,52 @@ def tf_ssd_bboxes_encode_layer(labels,
     Return:
       (target_labels, target_localizations, target_scores): Target Tensors.
     """
+    """
+    为了解释这段代码：ymin = yref - href / 2.
+    所以写出如下代码：
+    import numpy as np
+
+    dtype=np.float32
+    num_anchors = 6
+
+    y, x = np.mgrid[0:4, 0:4]
+    print(y)
+    print(x)
+    y = np.expand_dims(y, axis=-1) 
+    x = np.expand_dims(x, axis=-1)  
+    h = np.ones((num_anchors, ), dtype=dtype)  
+    w = np.ones((num_anchors, ), dtype=dtype)  
+    ymin = y - h / 2.
+    print(ymin)
+    上面程序运行结果为：
+    [[0 0 0 0]
+     [1 1 1 1]
+     [2 2 2 2]
+     [3 3 3 3]]
+    [[0 1 2 3]
+     [0 1 2 3]
+     [0 1 2 3]
+     [0 1 2 3]]
+    [[[-0.5 -0.5 -0.5 -0.5 -0.5 -0.5]
+      [-0.5 -0.5 -0.5 -0.5 -0.5 -0.5]
+      [-0.5 -0.5 -0.5 -0.5 -0.5 -0.5]
+      [-0.5 -0.5 -0.5 -0.5 -0.5 -0.5]]
+
+     [[ 0.5  0.5  0.5  0.5  0.5  0.5]
+      [ 0.5  0.5  0.5  0.5  0.5  0.5]
+      [ 0.5  0.5  0.5  0.5  0.5  0.5]
+      [ 0.5  0.5  0.5  0.5  0.5  0.5]]
+
+     [[ 1.5  1.5  1.5  1.5  1.5  1.5]
+      [ 1.5  1.5  1.5  1.5  1.5  1.5]
+      [ 1.5  1.5  1.5  1.5  1.5  1.5]
+      [ 1.5  1.5  1.5  1.5  1.5  1.5]]
+
+     [[ 2.5  2.5  2.5  2.5  2.5  2.5]
+      [ 2.5  2.5  2.5  2.5  2.5  2.5]
+      [ 2.5  2.5  2.5  2.5  2.5  2.5]
+      [ 2.5  2.5  2.5  2.5  2.5  2.5]]]
+    """
     # Anchors coordinates and volume.
     yref, xref, href, wref = anchors_layer
     ymin = yref - href / 2.
