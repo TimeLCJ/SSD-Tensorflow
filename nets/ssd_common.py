@@ -193,6 +193,11 @@ def tf_ssd_bboxes_encode_layer(labels,
     feat_h = feat_ymax - feat_ymin
     feat_w = feat_xmax - feat_xmin
     # Encode features.
+    # 其实和我们的Faster rcnn是一样的，是求真实框与anchor之间的变换，
+    # 你把上面随便一个移项，就会得anchor经过伸缩变换得到真实的框，所以这个地方回归的是一种变换
+    # ，因为实际我们的框是存在的，然后经过我们回归得到的变换，经过变换得到真实框，
+    # 所以这个地方损失函数其实是我们预测的是变换，我们实际的框和anchor之间的变换和我们预测的变换之间的loss。
+    # 我们回归的是一种变换。并不是直接预测框，这个和YOLO是不一样的。和Faster RCNN是一样的。
     feat_cy = (feat_cy - yref) / href / prior_scaling[0]
     feat_cx = (feat_cx - xref) / wref / prior_scaling[1]
     feat_h = tf.log(feat_h / href) / prior_scaling[2]
