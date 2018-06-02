@@ -378,7 +378,7 @@ def ssd_net(inputs,
     end_points = {}
     with tf.variable_scope(scope, 'ssd_512_vgg', [inputs], reuse=reuse):
         # Original VGG-16 blocks.
-        net = slim.repeat(inputs, 2, slim.conv2d, 64, [3, 3], scope='conv1')
+        net = slim.repeat(inputs, 2, slim.conv2d, 64, [3, 3], scope='conv1')#slim.conv2d默认的padding方式为'SAME'
         end_points['block1'] = net
         net = slim.max_pool2d(net, [2, 2], scope='pool1')
         # Block 2.
@@ -400,6 +400,7 @@ def ssd_net(inputs,
 
         # Additional SSD blocks.
         # Block 6: let's dilate the hell out of it!
+        #rate这个参数表示带孔卷积核（atrous convolution）的hole size大小（hole size就是卷积核感受野跳过的长度）
         net = slim.conv2d(net, 1024, [3, 3], rate=6, scope='conv6')
         end_points['block6'] = net
         # Block 7: 1x1 conv. Because the fuck.
